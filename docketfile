@@ -1,0 +1,21 @@
+FROM ubuntu:20.04
+
+RUN apt-get update && apt-get install -y \
+    apache2 \
+    mysql-server \
+    php \
+    libapache2-mod-php \
+    php-mysql
+
+RUN echo "<?php \$db = mysqli_connect('localhost', 'root', '', 'website'); ?>" > /var/www/html/db.php
+
+COPY index.php /var/www/html/index.php
+COPY flag.txt /flag.txt
+
+RUN chown -R www-data:www-data /var/www/html
+RUN chmod 755 /var/www/html
+
+EXPOSE 8080
+EXPOSE 3306
+
+CMD ["apache2-foreground"]
